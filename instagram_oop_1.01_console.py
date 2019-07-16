@@ -8,17 +8,22 @@ from selenium import webdriver
 from selenium.common.exceptions import TimeoutException, WebDriverException
 import datetime
 import imaplib
-from PyQt5 import QtWidgets
+# from PyQt5 import QtWidgets
 # import inst
 
 class instaClicker:
+    '''Класс инстаграмм бота, лайкает по списку тегов из файла, запоминает время последнего запуска и не позволяет запускает чаще 1 раза в час,
+     позволяет получать код безопасности из почты
+
+     Class instagram bot, liked on list of tags, save time of last start script and don't let start more then 1 in 1 hour, if need get security code from emeil'''
     html = 'https://vk.com/honor5?w=wall6864019_13264%2Fall'
     html2 = 'https://www.instagram.com/accounts/login/?source=auth_switcher'
+    url = 'https://www.instagram.com/'
     count = 0
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3729.169 Safari/537.36')
-    driver = webdriver.Chrome('lib\chromedriver.exe', options=options)
+    driver = webdriver.Chrome('lib\chromedriver.exe')
     driver.set_page_load_timeout(35)
     user = ''
     login = ''
@@ -37,9 +42,9 @@ class instaClicker:
     timeLastStart=''
 
     def main(self, user='HMobileShots', password='GJPjL2wX', set_count=9):
-        url = 'https://www.instagram.com/'
+        '''Главная функция запускает бота (Параметры - login и пароль)
+               Main function, run bot (Parametr's - Login and password)'''
         listoftags = []
-        url2 = url + 'accounts/login/?source=auth_switcher'
         inst = instaClicker()
         # check which user chouse
         if user == 'Hon0r5':
@@ -75,11 +80,11 @@ class instaClicker:
             print('all okay, program run and now logging user')
             pass
 
-        self.flogin(url2, login=self.login, password=self.password)  # logging in instagram
+        self.flogin(login=self.login, password=self.password)  # logging in instagram
 
         start_time = time.time()
         for i in self.listoftags[:set_count]:
-            inst.fsearch(url, i)  # find page with tags
+            inst.fsearch(i)  # find page with tags
             cont = self.likedAndCommentPosts(commentYN=0)  # лайкаем 3 лучших и 6 новых фото
             print('tags', i, 'liked - ', cont)
             time.sleep(3)
@@ -97,11 +102,10 @@ class instaClicker:
         #write time last work script in file
         winsound.Beep(440, 450)
 
-    def tosec(self, time):
-        sum = ((int(time[:2])) * 3600) + ((int(time[3:5])) * 60) + (int(time[6:8]))
-        return sum
 
     def loads(self):  #loads all data from file
+        ''' Заходит в инстаграмм (Аргументы, логин и пароль)
+        Login to instagram (Parametrs=login, password'''
         file1 = list()
         with open('info\ListOfTags.txt', 'r', encoding='utf-8') as file:
             self.listoftags = file.read().split('\n')
@@ -112,20 +116,21 @@ class instaClicker:
             with open('info\\' + str(self.login) + '_end.txt', 'r', encoding='utf-8') as file2:
                 self.timeLastStart = file2.read()
         else:
-            with open('info\\' + str(self.login) + '_end.txt', 'w+', encoding='utf-8') as file2:
-                file2.write(str((time.mktime(datetime.datetime.now().timetuple() ))-3650))
-                self.timeLastStart = file2.read()
+            # with open('info\\' + str(self.login) + '_end.txt', 'w+', encoding='utf-8') as file2:
+            #     file2.write(str((time.mktime(datetime.datetime.now().timetuple() ))-3650))
+            #     self.timeLastStart = file2.read()
             with open('info\\' + str(self.login) + '_end.txt', 'r', encoding='utf-8') as file3:
                 self.timeLastStart = file3.read()
-
 
     if not os.path.exists:
         with open('logs\ListOfLikedUrltest.txt', 'w+', encoding='utf-8') as file1:
             pass
 
-    def flogin(self, url, login, password):
+    def flogin(self, login, password):
+        ''' Заходит в инстаграмм данных из файлов (список тегов, время последнего запуска программы
+                load data drom file (list of tags, time last start program '''
         self.driver.implicitly_wait(10)
-        self.driver.get(url)
+        self.driver.get(self.html2)
         elemname = self.driver.find_elements_by_name('username')
         elemname[0].send_keys(str(login))  # log
         elemname = self.driver.find_elements_by_name('password')
@@ -208,13 +213,12 @@ class instaClicker:
                 print('error')
 
 
-
-
         self.driver.implicitly_wait(5)
 
-    def fsearch(self, url, tag):
-        # elemname = driver.find_elements_by_xpath('//*[@id="react-root"]/section/nav/div[2]/div/div/div[2]/div/div')
-        urls = url + 'explore/tags/' + str(tag)
+    def fsearch(self, tag):
+        '''Поиск фотографий по тегу (Параметр тэг)
+        Search proto's in select tags(Parametr's tag)'''
+        urls = self.url + 'explore/tags/' + str(tag)
         self.driver.get(urls)
         html = self.driver.page_source
         elemname = self.driver.find_elements_by_xpath(
@@ -223,6 +227,8 @@ class instaClicker:
         time.sleep(2)
 
     def checkheart(self, url):
+        '''Проверка есть ли лайк на фото (Параметр - url)
+               Check if photo liked or not (Parametr's - url)'''
         # print('link', url)
         self.driver.refresh()
         soup = self.driver.page_source  # get raw full html code
@@ -300,6 +306,8 @@ class instaClicker:
         return countf
 
     def check_mail(self):
+        '''Получение кода безопасности из емейла (Параметр - нет)
+               Check and get security code in email(Parametr's - None)'''
         mail = imaplib.IMAP4_SSL('imap.gmail.com')
         mail.login(self.email,self.email_password)
         mail.list()
@@ -321,32 +329,7 @@ class instaClicker:
         answ=answ[0][17:23]
         return answ
 
-# conn = sqlite3.connect("tagsComments.db")
-# cursor = conn.cursor()
-# sql = "SELECT * FROM tagsComments WHERE tag=?"
-# cursor.execute(sql, [("pixelxl")])
-# cursor.fetchall()  # or use fetchone()
-
 inst = instaClicker()
-
-# for i in range (10):
-#     user='Honor'
-#     set_count=14
-#     inst.set_count=set_count
-#     inst.user=user
-#     inst.main(user=user,set_count=set_count)
-#
-#     time.sleep(600)
-#
-#     user='Honor1'
-#     set_count=10
-#     inst.set_count=set_count
-#     inst.user=user
-#     inst.main(user=user,set_count=set_count)
-#     time.sleep(3600)
-#     print('pause in hour')
-
-
 
 if __name__ == "__main__" :
     if len(sys.argv)==1:
@@ -354,7 +337,7 @@ if __name__ == "__main__" :
         user2 = 'HMobileShots'
         set_count = 9
         inst.set_count = set_count
-        inst.main(user=user2, set_count=set_count)
+        inst.main(user=user1, set_count=set_count)
         a=input()
     else :
         inst.main(user=str(sys.argv[1]), password=str(sys.argv[2]), set_count=10)
