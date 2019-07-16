@@ -23,7 +23,7 @@ class instaClicker:
     options = webdriver.ChromeOptions()
     options.add_argument('headless')
     options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3729.169 Safari/537.36')
-    driver = webdriver.Chrome('lib\chromedriver.exe')
+    driver = webdriver.Chrome('lib\chromedriver.exe', options=options)
     driver.set_page_load_timeout(35)
     user = ''
     login = ''
