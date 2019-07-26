@@ -337,7 +337,7 @@ if __name__ == "__main__" :
         user2 = 'HMobileShots'
         set_count = 9
         inst.set_count = set_count
-        inst.main(user=user1, set_count=set_count)
+        inst.main(user=user2, set_count=set_count)
         a=input()
     else :
         inst.main(user=str(sys.argv[1]), password=str(sys.argv[2]), set_count=10)
