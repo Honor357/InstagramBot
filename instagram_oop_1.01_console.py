@@ -201,7 +201,7 @@ class instaClicker:
             if elemname.text.upper()==str(self.user).upper():
                 print('Logged user - ', login, 'in instagram')
             else:
-                print('error, user not logged, program closed168')
+                print('error, user not logged, program closed')
                 self.driver.quit()
                 exit()
         except:
