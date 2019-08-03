@@ -213,7 +213,6 @@ class instaClicker:
         self.driver.implicitly_wait(5)
 
     def fsearch(self, url, tag):
-        # elemname = driver.find_elements_by_xpath('//*[@id="react-root"]/section/nav/div[2]/div/div/div[2]/div/div')
         urls = url + 'explore/tags/' + str(tag)
         self.driver.get(urls)
         html = self.driver.page_source
@@ -277,9 +276,6 @@ class instaClicker:
                 time.sleep(1)
                 if self.checkheart(self.driver.current_url):
                     try:
-                        # elemname = self.driver.find_element_by_css_selector(
-                        #      'body > div:nth-child(12) > div > div.zZYga > div > article > '
-                        #      'div.eo2As > section.ltpMr.Slqrh > span.fr66n > button')                        # serch button heart
                         elemname = self.driver.find_element_by_css_selector(
                             '#react-root > section > main > div > div > article > div.eo2As > section.ltpMr.Slqrh > span.fr66n > button > span')  # serch button heart
 
