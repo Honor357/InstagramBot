@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
 import sys
 import os
 import re
@@ -125,6 +127,7 @@ class instaClicker:
             random.shuffle(self.listoftags)
             if self.listoftags:
                 print('list of tags load successful, count - ', len(self.listoftags))
+        print('ok')
         if os.path.exists('info\\' + str(self.login) + '_end.txt'):
             with open('info\\' + str(self.login) + '_end.txt', 'r', encoding='utf-8') as file2:
                 self.timeLastStart = file2.read()
@@ -271,7 +274,7 @@ class instaClicker:
             if self.checkheart(self.driver.current_url):
                 try:
                     elemname = self.driver.find_element_by_css_selector(
-                        '#react-root > section > main > div > div > article > div.eo2As > section.ltpMr.Slqrh > span.fr66n > button > span')  # serch button heart
+                        '#react-root > section > main > div > div.ltEKP > article > div.eo2As > section.ltpMr.Slqrh > span.fr66n > button')  # serch button heart
                     # elemname = self.driver.find_element_by_class_name('coreSpriteHeartOpen')
                     # elemname = self.driver.find_element('coreSpriteHeartOpen')
                     time.sleep(2)
@@ -303,7 +306,7 @@ class instaClicker:
                         #      'body > div:nth-child(12) > div > div.zZYga > div > article > '
                         #      'div.eo2As > section.ltpMr.Slqrh > span.fr66n > button')                        # serch button heart
                         elemname = self.driver.find_element_by_css_selector(
-                            '#react-root > section > main > div > div > article > div.eo2As > section.ltpMr.Slqrh > span.fr66n > button > span')  # serch button heart
+                            '#react-root > section > main > div > div.ltEKP > article > div.eo2As > section.ltpMr.Slqrh > span.fr66n > button')  # serch button heart
 
                         time.sleep(self.delay)
                         elemname.click()  # push
@@ -345,13 +348,14 @@ class instaClicker:
 
 
 if __name__ == "__main__":
+    print(sys.argv)
     if len(sys.argv) == 1:
         user1 = 'Hon0r5'
         user2 = 'HMobileShots'
         set_countlocal = 9
-        inst = instaClicker(headless=0, user=user2, set_count=set_countlocal)
+        inst = instaClicker(headless=1, user=user1, set_count=set_countlocal)
         inst.main()
         a = input()
     else:
-        inst = instaClicker(headless=0, user=str(sys.argv[1]), password=str(sys.argv[2]), set_count=10)
+        inst = instaClicker(headless=0, user=str(sys.argv[1]), set_count=str(sys.argv[2]))
         inst.main()
